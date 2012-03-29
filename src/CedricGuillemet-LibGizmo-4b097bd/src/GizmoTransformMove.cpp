@@ -227,9 +227,6 @@ void CGizmoTransformMove::Draw()
       axeZ.Normalize();
     }
 
-
-
-
     DrawQuad(orig, 0.5f*GetScreenFactor(), (m_MoveTypePredict == MOVE_XZ), axeX, axeZ);
     DrawQuad(orig, 0.5f*GetScreenFactor(), (m_MoveTypePredict == MOVE_XY), axeX, axeY);
     DrawQuad(orig, 0.5f*GetScreenFactor(), (m_MoveTypePredict == MOVE_YZ), axeY, axeZ);
@@ -250,20 +247,21 @@ void CGizmoTransformMove::Draw()
     if (m_MoveTypePredict != MOVE_Z) DrawAxis(orig,axeZ,axeX,axeY, 0.05f,0.83f,vector4(0,0,1,1));
     else DrawAxis(orig,axeZ,axeX,axeY, 0.05f,0.83f,vector4(1,1,1,1));
   }
+}
 
-  void CGizmoTransformMove::ApplyTransform(tvector3& trans, bool bAbsolute)
+void CGizmoTransformMove::ApplyTransform(tvector3& trans, bool bAbsolute)
+{
+  if (bAbsolute)
   {
-    if (bAbsolute)
-    {
-      m_pMatrix->m16[12] = trans.x;
-      m_pMatrix->m16[13] = trans.y;
-      m_pMatrix->m16[14] = trans.z;
-    }
-    else
-    {
-      m_pMatrix->m16[12] += trans.x;
-      m_pMatrix->m16[13] += trans.y;
-      m_pMatrix->m16[14] += trans.z;
-    }
+    m_pMatrix->m16[12] = trans.x;
+    m_pMatrix->m16[13] = trans.y;
+    m_pMatrix->m16[14] = trans.z;
   }
+  else
+  {
+    m_pMatrix->m16[12] += trans.x;
+    m_pMatrix->m16[13] += trans.y;
+    m_pMatrix->m16[14] += trans.z;
+  }
+}
 
