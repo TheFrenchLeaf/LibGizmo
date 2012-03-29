@@ -137,7 +137,9 @@ void GLWidget::paintGL()
     // Draw the gizmo object
     if (gizmo)
     {
+      glPushAttrib(GL_CURRENT_BIT | GL_LINE_BIT | GL_LIGHTING_BIT | GL_DEPTH_BUFFER_BIT);
       gizmo->Draw();
+      glPopAttrib();
     }
 }
 
@@ -150,7 +152,7 @@ void GLWidget::resizeGL(int width, int height)
     glOrtho(-0.5, +0.5, -0.5, +0.5, 4.0, 15.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0,0,10,0,0,0,0,1,0);
+    gluLookAt(3,3,10,0,0,0,0,1,0);
 
     if (gizmo)
         gizmo->SetScreenDimension( width, height );
@@ -160,17 +162,25 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     if (gizmo /*&& event->buttons() & Qt::LeftButton*/)
       gizmo->OnMouseDown( event->x(), event->y());
+
+    this->update();
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
   std::cout << event->x() << " " << event->y() << std::endl;
   if (gizmo /*&& event->buttons() & Qt::LeftButton*/)
+    //gizmo->OnMouseMove( event->x(), event->y() );
     gizmo->OnMouseMove( event->x(), event->y() );
+    //gizmo->OnMouseMove(this->width()/2.0, this->height()/2.0);
+
+  this->update();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
   if (gizmo /*&& event->buttons() & Qt::LeftButton*/)
     gizmo->OnMouseUp( event->x(), event->y() );
+
+  this->update();
 }
